@@ -1,0 +1,43 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlogPost from "../../components/BlogPost.astro";
+
+// 生成页面：tags/astro...tags/success...
+// 对每个页面都会传入参数(params)，比如这里的tag，但貌似不是所有的param都能被成功使用》。。
+// 也就是说[]中的每一个{}都是一个页面对象
+
+export async function getStaticPaths() {
+  const allPosts = Object.values(
+    import.meta.glob("../posts/*.md", { eager: true })
+  );
+  const uniqueTags = [
+    ...new Set(allPosts.map((post: any) => post.frontmatter.tags).flat()),
+  ];
+  // 通过map得到 allPosts 中每一篇文章的标签列表，由于有多篇文章，这些标签就构成了一个二维标签列表，通过 flat()将他们平摊在集合中进行去重，最后数组中就得到了独一无二的标签组。
+  return uniqueTags.map((tag) => {
+    const filteredPosts = allPosts.filter((post: any) =>
+      post.frontmatter.tags?.includes(tag)
+    );
+
+    return {
+      params: { tag },
+      props: { posts: filteredPosts },
+    };
+  });
+}
+
+// 路由中传入的params或者props
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<BaseLayout pageTitle={tag}>
+  <p>包含「{tag}」标签的文章</p>
+  <ul>
+    {
+      posts.map((post: any) => (
+        <BlogPost title={post.frontmatter.title} url={post.url} />
+      ))
+    }
+  </ul>
+</BaseLayout>
