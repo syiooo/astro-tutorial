@@ -1,22 +1,34 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BlogPost from "../../components/BlogPost.astro";
-
+import { getCollection } from "astro:content";
 // 生成页面：tags/astro...tags/success...
 // 对每个页面都会传入参数(params)，比如这里的tag，但貌似不是所有的param都能被成功使用》。。
 // 也就是说[]中的每一个{}都是一个页面对象
 
 export async function getStaticPaths() {
-  const allPosts = Object.values(
-    import.meta.glob("../posts/*.md", { eager: true })
-  );
-  const uniqueTags = [
-    ...new Set(allPosts.map((post: any) => post.frontmatter.tags).flat()),
+  const collection = await getCollection('blog');
+  const  allPosts = collection.filter((item: any) => item?.rendered?.metadata?.frontmatter?.tags);
+
+  allPosts.forEach((post: any) => {
+    
+  })
+  
+  let uniqueTags = [
+    ...new Set(allPosts.map((post: any) => {
+      let res = Array.isArray(post?.rendered?.metadata?.frontmatter?.tags) ? post?.rendered?.metadata?.frontmatter?.tags : [post?.rendered?.metadata?.frontmatter?.tags];
+
+      return res.flat()
+    }))
   ];
+
+  uniqueTags = uniqueTags.flat();
+  
+  
   // 通过map得到 allPosts 中每一篇文章的标签列表，由于有多篇文章，这些标签就构成了一个二维标签列表，通过 flat()将他们平摊在集合中进行去重，最后数组中就得到了独一无二的标签组。
   return uniqueTags.map((tag) => {
     const filteredPosts = allPosts.filter((post: any) =>
-      post.frontmatter.tags?.includes(tag)
+      post?.rendered.metadata.frontmatter?.tags?.includes(tag),
     );
 
     return {
@@ -32,12 +44,14 @@ const { posts } = Astro.props;
 ---
 
 <BaseLayout pageTitle={tag}>
-  <p>包含「{tag}」标签的文章</p>
-  <ul>
-    {
-      posts.map((post: any) => (
-        <BlogPost title={post.frontmatter.title} url={post.url} />
-      ))
-    }
-  </ul>
+  <div class="inset-shadow-sm inset-shadow-gray-200 rounded w-1/2 m-auto p-3">
+    <p class="text-slate-500 text-sm">标签：「{tag}」</p>
+    <ul class="flex flex-col p-0! cursor-pointer ">
+      {
+        posts.map((post: any) => (
+          <BlogPost title={post?.slug} url={`/posts/${post?.slug}`} />
+        ))
+      }
+    </ul>
+  </div>
 </BaseLayout>

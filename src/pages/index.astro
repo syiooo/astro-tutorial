@@ -1,10 +1,16 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Greeting from "../components/Greeting";
-const pageTitle = "首页";
+import HomeBackground from "../components/HomeBackground.astro"
+import HomeArticleContainer from '../components/HomeArticleContainer.astro'
+import { getCollection } from "astro:content";
+import AuthorCard from "../components/AuthorCard.astro";
+const allPosts = await getCollection('blog');
 ---
 
-<BaseLayout pageTitle={pageTitle}>
-  <h2>我超棒的博客副标题</h2>
-  <Greeting client:load messages={["Hi", "Hello", "Howdy", "Hey there"]} />
+<BaseLayout>
+  <HomeBackground />
+  <div class="flex gap-5 justify-center">
+    <HomeArticleContainer posts={allPosts} />
+    <AuthorCard />
+  </div>
 </BaseLayout>

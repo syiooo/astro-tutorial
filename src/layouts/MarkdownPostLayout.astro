@@ -1,39 +1,64 @@
 ---
-import BaseLayout from './BaseLayout.astro';
-const { frontmatter } = Astro.props;
+import BaseLayout from "./BaseLayout.astro";
+import {author_info} from '../config/site';
+const { frontmatter, post } = Astro.props;
+const slug = post?.slug;
 ---
-<BaseLayout pageTitle={frontmatter.title}>
-  <p><em>{frontmatter.description}</em></p>
-  <p>{frontmatter.pubDate.toString().slice(0,10)}</p>
 
-  <p>作者：{frontmatter.author}</p>
+<div id="markdown-container" class="my-2 p-2 rounded">
+  <BaseLayout>
+    {frontmatter?.image?.url && <img src={frontmatter?.image?.url} width="300" alt={frontmatter?.image?.alt} />}
+    <!-- 文章标题 -->
+    <h1 class="text-center border-b-0!"><span class="inset-shadow-sm bg-gray-50 inset-shadow-gray-200 px-2">{slug}</span></h1>
+    <p><em>{frontmatter?.description}</em></p>
+    <p>{frontmatter?.pubDate?.toString().slice(0, 10)}</p>
+    <!-- 作者名 -->
+    <p class="text-slate-400 text-sm text-center">作者：{frontmatter?.author || author_info?.name}</p>
 
-  <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />
+    <slot />
 
-  <div class="tags">
-    {frontmatter.tags.map((tag: string) => (
-      <p class="tag"><a href={`/tags/${tag}`}>{tag}</a></p>
-    ))}
-  </div>
+    <div class="tags">
+      {
+        Array.isArray(frontmatter?.tags) && frontmatter?.tags?.map((tag: string) => (
+          <p class="tag">
+            <a href={`/tags/${tag}`}>{tag}</a>
+          </p>
+        ))
+      }
+    </div>
+  </BaseLayout>
+</div>
 
-  <slot />
-</BaseLayout>
 <style>
-  a {
-    color: #00539F;
-  }
+a {
+  color: #00539f;
+}
 
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-  }
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+}
 
-  .tag {
-    margin: 0.25em;
-    border: dotted 1px #a1a1a1;
-    border-radius: .5em;
-    padding: .5em 1em;
-    font-size: 1.15em;
-    background-color: #F8FCFD;
-  }
+.tag {
+  margin: 0.25em;
+  border: dotted 1px #a1a1a1;
+  border-radius: 0.5em;
+  padding: 0.5em 1em;
+  font-size: 1.15em;
+  background-color: #f8fcfd;
+}
+
+#markdown-container {
+  --color: rgb(241, 241, 241);
+  background-image: 
+    linear-gradient(to bottom,transparent 29px,var(--color) 1px),
+    linear-gradient(to right,transparent 29px,var(--color) 1px) ;
+  background-size: 30px 30px;
+  background-repeat: repeat;
+}
+
+h1 {
+  padding: 0;
+  margin: 0;
+}
 </style>

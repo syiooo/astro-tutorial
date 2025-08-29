@@ -1,0 +1,35 @@
+---
+// 第一部分：导入需要的功能
+import { getCollection } from 'astro:content';
+import MarkdownPostLayout from '../../layouts/MarkdownPostLayout.astro';
+import TOC from '../../components/TOC.astro';
+
+// 第二部分：告诉 Astro 要生成哪些页面
+export async function getStaticPaths() {
+  // 1. 从 content/posts 目录获取所有文章
+  const posts = await getCollection('blog');
+  // posts.forEach(e => {console.log(e?.rendered?.metadata?.frontmatter)});
+  
+  // 2. 为每篇文章创建一个"路径配置"
+  const res = posts.map((post) => ({
+    params: { slug: post.slug }, // URL 参数：/posts/文章名称
+    props: { post }, // 传递给页面的数据：整篇文章内容
+  }));
+  return res;
+}
+
+// 第三部分：接收数据并准备渲染
+const { post } = Astro.props; // 从 getStaticPaths 接收到的文章数据
+const { Content } = await post?.render(); // 将 Markdown 转换为 HTML
+const headings = post?.rendered?.metadata?.headings;
+---
+
+<!-- 第四部分：使用布局渲染页面 -->
+<MarkdownPostLayout post={post} frontmatter={post?.rendered?.metadata?.frontmatter}>
+  <div id="main" class="flex justify-center gap-10">
+    <article class="flex-2 max-w-[70vw]"><Content /></article>
+    <aside class="">
+      <TOC headings={headings}/>
+    </aside>
+  </div>
+</MarkdownPostLayout>

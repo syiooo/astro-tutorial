@@ -1,0 +1,32 @@
+---
+import {author_info} from '../config/site.js'
+---
+<div>
+  <div class="gap-2 shadow bg-white rounded flex flex-col items-center p-2!">
+    <img src={author_info?.avatar} class="transition -translate-y-10 w-30 object-cover shadow rounded-full! hover:scale-105 hover:transition hover:rotate-180" alt="Avatar">
+    <!-- 除了头像外的widget -->
+    <aside class="relative -top-10 flex flex-col items-center gap-2">
+      <!-- 作者名称 -->
+      <h1 class="text-center text-slate-600!">{author_info?.name}</h1>
+      <!-- 简介 -->
+      <p class="text-sm text-slate-500">{author_info?.description}</p>
+      <ul class="flex gap-2 flex-wrap justify-around *:even:bg-amber-100! *:even:text-amber-500!">
+        <!-- 标签列表 -->
+        {author_info.tags.map(tag => <a class="list-none! p-1! inline bg-emerald-100! text-sm font-mono text-emerald-500! rounded">
+          <span>{tag}</span>
+        </a> )}
+      </ul>
+    </aside>
+  </div>
+</div>
+
+<style>
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  h1 {
+    border-bottom: none;
+  }
+</style>
