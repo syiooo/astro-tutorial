@@ -9,9 +9,14 @@
 }
 
 body {
+  text-shadow: var(--text-shadow);
   font-family: "Noto Serif SC", serif;
   color: #17235d;
   font-weight: 500;
+}
+
+*::selection {
+  background-color: var(--color-indigo-100);
 }
 
 html,body {
@@ -112,6 +117,7 @@ h6 {
 }
 
 p {
+  font-size: var(--text-xl);
   margin-top: 0;
   margin-bottom: 16px;
 }

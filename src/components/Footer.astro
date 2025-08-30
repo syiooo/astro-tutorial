@@ -3,7 +3,7 @@ import Social from "./Social.astro";
 import {footer} from '../config/site.js';
 ---
 
-<footer class="my-5 flex gap-2 justify-center">
+<footer class="my-5 sticky w-full bottom-0 flex gap-2 justify-center">
   {footer.map(info => 
     <Social name={info?.name} link={info?.link} color={info?.color} />
   )}

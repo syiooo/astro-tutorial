@@ -44,12 +44,12 @@ const { posts } = Astro.props;
 ---
 
 <BaseLayout pageTitle={tag}>
-  <div class="inset-shadow-sm inset-shadow-gray-200 rounded w-1/2 m-auto p-3">
+  <div class="mt-10 inset-shadow-sm inset-shadow-gray-200 rounded w-1/2 m-auto p-3">
     <p class="text-slate-500 text-sm">标签：「{tag}」</p>
     <ul class="flex flex-col p-0! cursor-pointer ">
       {
         posts.map((post: any) => (
-          <BlogPost title={post?.slug} url={`/posts/${post?.slug}`} />
+          <BlogPost title={post?.slug} month={post.data.date.getMonth()} url={`/posts/${post?.slug}`} />
         ))
       }
     </ul>

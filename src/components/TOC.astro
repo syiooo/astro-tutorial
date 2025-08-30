@@ -35,4 +35,11 @@ const {headings} = Astro.props;
     padding: 0;
     box-sizing: border-box;
   }
+  a::after {
+    content: none;
+  }
+  a:hover {
+    background: var(--color-indigo-300);
+    color: white;
+  }
 </style>

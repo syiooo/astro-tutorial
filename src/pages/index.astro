@@ -9,8 +9,8 @@ const allPosts = await getCollection('blog');
 
 <BaseLayout>
   <HomeBackground />
-  <div class="flex gap-5 justify-center">
-    <HomeArticleContainer posts={allPosts} />
+  <div class="flex gap-5 justify-center mt-10">
+    { allPosts.length > 0 && <HomeArticleContainer posts={allPosts} />}
     <AuthorCard />
   </div>
 </BaseLayout>

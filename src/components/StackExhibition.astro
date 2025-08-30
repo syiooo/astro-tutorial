@@ -4,7 +4,7 @@ const tech_stack = about.tech_stack;
 ---
 
 <ul class="*:list-none! w-1/2 h-50 m-auto mt-60! relative z-2">
-  {tech_stack.map(t => <img src={t.icon} class="cursor-pointer w-30 h-30 rounded-3xl! bg-cover absolute left-[50%] -translate-x-[50%] bg-transparent" title={t.title} />) }
+  {tech_stack.map(t => <img src={t.icon} class="animate-pulse cursor-pointer w-30 h-30 rounded-3xl! bg-cover absolute left-[50%] -translate-x-[50%] bg-transparent" title={t.title} />) }
 </ul>
 
 <style>
@@ -29,6 +29,19 @@ img.active:nth-child(4) {
   transition: var(--trans);
   transform: translate(300px, -100px);
 }
+img.active:nth-child(5) {
+  transition: var(--trans);
+  transform: translate(500px, -100px);
+}
+img.active:nth-child(6) {
+  transition: var(--trans);
+  transform: translate(-500px, -100px);
+}
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+  transform: translate(0, 0);
+}
 </style>
 
 <script>
@@ -37,6 +50,7 @@ img.active:nth-child(4) {
   imgs.forEach(img => {
     img.addEventListener('click', () => {
       imgs.forEach(g => g.classList.toggle('active'))
+      imgs.forEach(g => g.classList.toggle('animate-pulse'))
     })
   })
 </script>

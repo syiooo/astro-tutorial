@@ -1,0 +1,39 @@
+---
+const {post: p} = Astro.props;
+import { article } from '../config/site.js'
+const cover_default = article.default_cover;
+---
+<li class="flex gap-5">
+  <a class="shadow hover:shadow-md hover:transition transition" href={p.url}>
+    <!-- 文章封面 -->
+    <img class="w-50 max-w-50! h-30 object-cover" src={p.data?.thumb || p.data?.index_img || cover_default} alt="文章封面">
+  </a>
+  <div class="flex-2">
+    <h2 class="cursor-pointer text-xl hover:transition text-shadow-2xs">
+    {/* 文章标题 */}
+      <a href={'/posts/'+p.slug}>{p.data?.title || p.slug}</a>
+    </h2>
+    {/* 文章摘要 */}
+    <p class="text-sm text-slate-500">{p.data?.excerpt || p.data?.description}</p>
+  </div>
+</li>
+
+<style>
+  h2 {
+    border: none;
+  }
+  a {
+    color: var(--color-slate-700);
+    transition: color .4s ease-in-out;
+  }
+  a:hover {
+    text-decoration: none;
+    color: var(--color-sky-700);
+  }
+  a::after {
+    display: none;
+  }
+  h2:hover::after {
+    content: '';
+  }
+</style>

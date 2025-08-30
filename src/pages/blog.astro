@@ -1,33 +1,43 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BlogPost from "../components/BlogPost.astro";
+import HomeBackground from "../components/HomeBackground.astro";
+import { getCollection } from "astro:content";
 const pageTitle = "博客列表";
 
-const allPosts = Object.values(
-  import.meta.glob("../data/blog/*.md", { eager: true }),
-);
-console.log('all:', allPosts[0]);
+const allPosts = await getCollection('blog');
+const formatPosts = {};
+const years = [...new Set(allPosts.map(post => post.data.date.getFullYear()))];
 
-// css 变量
+years.forEach( (year: string) => { formatPosts[year] = new Set() } )
 
-const mainColor = '#393E46';
+for (let year of years) {
+  // 遍历每一年的文章筛选出来
+  const correspondPosts = allPosts.filter(post => post.data.date.getFullYear() == year);
+  
+  formatPosts[year].add(... correspondPosts);
+}
+
+for (let key in formatPosts) {
+  formatPosts[key] = [... formatPosts[key]]
+}
+
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <ul>
-    {
-      allPosts.map((post: any) => (
-        post.frontmatter.title && <BlogPost title={post.frontmatter.title} url={post.url} />
-      ))
-    }
-  </ul>
+  <HomeBackground />
+  { allPosts.length > 0 && <article #id="archive-container" class="flex mt-20 flex-col items-center">
+    <div class="bg-white inset-shadow inset-shadow-gray-500 rounded p-5">
+      {
+        Object.keys(formatPosts).map((year: any) => 
+          <div class="w-150 text-xl text-shadow-2xs">
+            <span class="text-slate-600 text-2xl">{year}年</span>
+            <ul>{formatPosts[year].map((post: any) => <BlogPost title={post.slug} url={`/posts/${post.slug}`} month={post.data.date.getMonth()+1} />)}</ul>
+          </div>
+        )
+      }
+    </div>
+  </article>}
 </BaseLayout>
 
-<style>
-  ul {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-</style>
 

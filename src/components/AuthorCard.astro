@@ -7,7 +7,9 @@ import {author_info} from '../config/site.js'
     <!-- 除了头像外的widget -->
     <aside class="relative -top-10 flex flex-col items-center gap-2">
       <!-- 作者名称 -->
-      <h1 class="text-center text-slate-600!">{author_info?.name}</h1>
+      <h1 class="text-shadow-2xs transition cursor-pointer hover:text-indigo-500! text-center">
+        <a href="#" class="text-slate-600!">{author_info?.name}</a>
+      </h1>
       <!-- 简介 -->
       <p class="text-sm text-slate-500">{author_info?.description}</p>
       <ul class="flex gap-2 flex-wrap justify-around *:even:bg-amber-100! *:even:text-amber-500!">

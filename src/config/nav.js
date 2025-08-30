@@ -8,7 +8,7 @@ export const nav = [
     src: '/about'
   },
   {
-    title: '博客',
+    title: '归档',
     src: '/blog'
   },
   {

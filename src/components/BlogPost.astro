@@ -1,5 +1,8 @@
 ---
-const { title, url } = Astro.props;
+const { title, url, month } = Astro.props;
 ---
 
-<li class="list-none!"><a class="text-teal-600!" href={url}>{title}</a></li>
+<li class="list-none! text-xl">
+  <span class="text-slate-500">{month}月</span>
+  <a class="text-teal-600!" href={url}>{title}</a>
+</li>
